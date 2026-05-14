@@ -2,8 +2,12 @@
 
 package com.tapresearch.tapresearch_flutter_plugin
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import com.tapresearch.tapsdk.TapInitOptions
 import com.tapresearch.tapsdk.TapResearch
 import com.tapresearch.tapsdk.callback.TRContentCallback
