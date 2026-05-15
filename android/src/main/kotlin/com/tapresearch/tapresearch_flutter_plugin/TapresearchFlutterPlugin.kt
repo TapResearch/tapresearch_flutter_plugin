@@ -39,7 +39,7 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private lateinit var channel: MethodChannel
-    private val mainHandler = Handler(Looper.getMainLooper())
+    private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(binding.binaryMessenger, "tapresearch_flutter_plugin")
