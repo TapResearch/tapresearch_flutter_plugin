@@ -1,3 +1,8 @@
+/// ---------------------------------------------------------------------------------------------
+/// TapResearchFlutterPlugin.swift
+///
+///
+
 import Flutter
 import TapResearch
 
