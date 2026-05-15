@@ -24,7 +24,7 @@ Run the example app bundled within this plugin.
   - flutter run
 
 - Second, if you need to change the API TOKEN and/or User Identifier, please modify 
-example/lib/main.dart and re-run.  The values provided in the example should work fine.
+example/lib/main.dart and re-run.  However, the values provided in the example should work fine.
 
 > [!NOTE]
 > API TOKEN and User Identifier will be different for iOS and Android.
@@ -39,7 +39,7 @@ See example/lib/main.dart.  All the typical features are contained and implement
 
 ### Wait for onTapResearchSdkReady()
 - implement TRSdkReadyCallback then add code to onTapResearchSdkReady()
-- For example, at this point, you would want to display the tiles or buttons that allow users to click and show surveys.
+- For example, at this point, you would want to display the screen, tiles or buttons that allow users to click and show surveys.
 
 ### Showing Surveys in Standard Wall
 - _plugin.showContentForPlacement('YourPlacementTag')
@@ -50,6 +50,7 @@ See example/lib/main.dart.  All the typical features are contained and implement
 ### Listening for new Surveys for 'Survey Wall Preview'
 - _plugin.setSurveysRefreshedListener(..)
 - implement TRSurveysRefreshedListener then add code to onSurveysRefreshedForPlacement()
+- For example, at this point, if you are displaying a Survey Wall Preview screen, you would want to re-fetch and re-render the new survey tiles. 
 
 ### Collecting Rewards on Survey Completions
 - implement TRRewardCallback then add code to onTapResearchDidReceiveRewards()
