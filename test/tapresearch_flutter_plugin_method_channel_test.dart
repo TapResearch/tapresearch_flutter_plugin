@@ -5,13 +5,20 @@ import 'package:tapresearch_flutter_plugin/tapresearch_flutter_plugin_method_cha
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MethodChannelTapresearchFlutterPlugin platform = MethodChannelTapresearchFlutterPlugin();
+  late MethodChannelTapresearchFlutterPlugin platform;
   const MethodChannel channel = MethodChannel('tapresearch_flutter_plugin');
+  final calls = <MethodCall>[];
 
   setUp(() {
+    platform = MethodChannelTapresearchFlutterPlugin();
+    calls.clear();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-          return '42';
+          calls.add(methodCall);
+          return switch (methodCall.method) {
+            'isReady' => true,
+            _ => null,
+          };
         });
   });
 
@@ -20,7 +27,8 @@ void main() {
         .setMockMethodCallHandler(channel, null);
   });
 
-  // test('getPlatformVersion', () async {
-  //   expect(await platform.getPlatformVersion(), '42');
-  // });
+  test('isReady invokes native method and returns result', () async {
+    expect(await platform.isReady(), isTrue);
+    expect(calls.single.method, 'isReady');
+  });
 }
