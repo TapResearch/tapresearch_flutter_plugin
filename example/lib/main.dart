@@ -28,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen>
     implements TRSdkReadyCallback, TRErrorCallback, TRRewardCallback {
   final _plugin = TapresearchFlutterPlugin();
   bool _initializing = true;
+  TRPlacementDetails? _placementDetails;
+  bool? _isProfilerPlacement;
 
   @override
   void initState() {
@@ -95,54 +97,125 @@ class _HomeScreenState extends State<HomeScreen>
     messenger.showSnackBar(SnackBar(content: Text(message)));
   }
 
+  Future<void> _getPlacementDetails() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final tag = _placementTagController.text;
+    final details = await _plugin.getPlacementDetails(
+      tag,
+      errorListener: this,
+    );
+    final isProfilerPlacement = details?.contentType == 'profiler';
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _placementDetails = details;
+      _isProfilerPlacement = details == null ? null : isProfilerPlacement;
+    });
+
+    if (details == null) {
+      messenger.showSnackBar(
+        SnackBar(content: Text('No placement details returned for $tag')),
+      );
+      return;
+    }
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          'content_type: ${details.contentType ?? 'unknown'}'
+          '${isProfilerPlacement ? ' (profiler)' : ' (not profiler)'}',
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('TapResearch Example')),
       body: Center(
-        child: _initializing
-            ? const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Please wait while initializing...'),
-                ],
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: TextField(
-                      controller: _placementTagController,
-                      decoration: const InputDecoration(
-                        labelText: 'Placement Tag',
-                        border: OutlineInputBorder(),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: _initializing
+              ? const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('Please wait while initializing...'),
+                  ],
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: TextField(
+                        controller: _placementTagController,
+                        decoration: const InputDecoration(
+                          labelText: 'Placement Tag',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _showStandardWall,
-                    child: const Text('Show Survey Wall'),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _getSurveys,
-                    child: const Text('Get Surveys'),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const SurveyWallPreviewScreen()),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _showStandardWall,
+                      child: const Text('Show Survey Wall'),
                     ),
-                    child: const Text('Survey Wall Preview'),
-                  ),
-                ],
-              ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _getSurveys,
+                      child: const Text('Get Surveys'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _getPlacementDetails,
+                      child: const Text('Get Placement Details'),
+                    ),
+                    const SizedBox(height: 16),
+                    if (_placementDetails != null) ...[
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 340),
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Placement Details',
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Text('Name: ${_placementDetails!.name ?? 'n/a'}'),
+                                Text(
+                                  'content_type: ${_placementDetails!.contentType ?? 'n/a'}',
+                                ),
+                                Text(
+                                  'Is profiler: ${_isProfilerPlacement == true ? 'Yes' : 'No'}',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const SurveyWallPreviewScreen()),
+                      ),
+                      child: const Text('Survey Wall Preview'),
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }
