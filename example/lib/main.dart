@@ -51,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void onTapResearchSdkReady() {
     debugPrint('TapResearch SDK is ready');
-    setState(() => _initializing = false);
+    if (mounted) {
+      setState(() => _initializing = false);
+    }
+    _getPlacementDetails(showFeedback: false);
   }
 
   // TRErrorCallback
@@ -97,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen>
     messenger.showSnackBar(SnackBar(content: Text(message)));
   }
 
-  Future<void> _getPlacementDetails() async {
+  Future<void> _getPlacementDetails({bool showFeedback = true}) async {
     final messenger = ScaffoldMessenger.of(context);
     final tag = _placementTagController.text;
     final details = await _plugin.getPlacementDetails(
@@ -116,20 +119,24 @@ class _HomeScreenState extends State<HomeScreen>
     });
 
     if (details == null) {
-      messenger.showSnackBar(
-        SnackBar(content: Text('No placement details returned for $tag')),
-      );
+      if (showFeedback) {
+        messenger.showSnackBar(
+          SnackBar(content: Text('No placement details returned for $tag')),
+        );
+      }
       return;
     }
 
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(
-          'content_type: ${details.contentType ?? 'unknown'}'
-          '${isProfilerPlacement ? ' (profiler)' : ' (not profiler)'}',
+    if (showFeedback) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            'content_type: ${details.contentType ?? 'unknown'}'
+            '${isProfilerPlacement ? ' (profiler)' : ' (not profiler)'}',
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
@@ -164,7 +171,11 @@ class _HomeScreenState extends State<HomeScreen>
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: _showStandardWall,
-                      child: const Text('Show Survey Wall'),
+                      child: Text(
+                        _isProfilerPlacement == true
+                            ? 'Show Profiler'
+                            : 'Show Survey Wall',
+                      ),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
