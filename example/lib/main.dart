@@ -37,8 +37,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<void> _initializeSdk() async {
     await _plugin.initialize(
-      apiToken: Platform.isAndroid ? 'fb28e5e0572876db0790ecaf6c588598' : 'YOUR-IOS-API-TOKEN',
-      userIdentifier: Platform.isAndroid ? 'tr-sdk-test-user-46183135' : 'YOUR-IOS-USER-IDENTIFIER',
+      apiToken: Platform.isAndroid ? 'fb28e5e0572876db0790ecaf6c588598' : '100e9133abc21471c8cd373587e07515',
+      userIdentifier: Platform.isAndroid ? 'tr-sdk-test-user-46183135' : 'tr-sdk-test-ios-fultter-user',
       sdkReadyCallback: this,
       errorCallback: this,
       rewardCallback: this,
