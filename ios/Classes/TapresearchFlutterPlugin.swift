@@ -99,13 +99,15 @@ private final class NoOpGrantBoostDelegate: NSObject, TapResearchGrantBoostRespo
     /// - Returns: Nothing.
     func onTapResearchGrantBoostResponse(_ response: TRGrantBoostResponse) {}
 }
-
 // MARK: - TapresearchFlutterPlugin
 /// ---------------------------------------------------------------------------------------------
 /// ---------------------------------------------------------------------------------------------
-public class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
+@objc(TapresearchFlutterPlugin)
+public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
     TapResearchSDKDelegate, TapResearchRewardDelegate,
     TapResearchQuickQuestionDelegate, TapResearchSurveysDelegate {
+
+	@objc public static let packageVersion: String = "3.7.0--rc0"
 
     private var channel: FlutterMethodChannel!
     private var hasRewardCallback = false
