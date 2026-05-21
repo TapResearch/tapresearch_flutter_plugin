@@ -16,7 +16,7 @@ class TRGrantBoostResponse {
         boostTag: json['boost_tag'] as String?,
         success: json['success'] as bool?,
         error: json['error'] != null
-            ? TRError.fromJson(json['error'] as Map<String, dynamic>)
+            ? TRError.fromJson((json['error'] as Map).cast<String, dynamic>())
             : null,
       );
 

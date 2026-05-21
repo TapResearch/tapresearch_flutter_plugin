@@ -11,7 +11,7 @@ class QuickQuestion {
 
   factory QuickQuestion.fromJson(Map<String, dynamic> json) => QuickQuestion(
         type: json['type'] as String,
-        payload: QQPayload.fromJson(json['payload'] as Map<String, dynamic>),
+        payload: QQPayload.fromJson((json['payload'] as Map).cast<String, dynamic>()),
       );
 
   Map<String, dynamic> toJson() => {
@@ -60,10 +60,10 @@ class QQPayload {
         userLocale: json['user_locale'] as String,
         seenAt: json['seen_at'] as String,
         complete: json['complete'] != null
-            ? Complete.fromJson(json['complete'] as Map<String, dynamic>)
+            ? Complete.fromJson((json['complete'] as Map).cast<String, dynamic>())
             : null,
         questions: (json['questions'] as List<dynamic>)
-            .map((e) => Question.fromJson(e as Map<String, dynamic>))
+            .map((e) => Question.fromJson((e as Map).cast<String, dynamic>()))
             .toList(),
         targetAudience: (json['target_audience'] as List<dynamic>?)
             ?.map((e) => Map<String, String>.from(e as Map))
@@ -124,7 +124,7 @@ class Question {
         questionText: json['question_text'] as String,
         questionType: json['question_type'] as String,
         userAnswer: json['user_answer'] != null
-            ? UserAnswer.fromJson(json['user_answer'] as Map<String, dynamic>)
+            ? UserAnswer.fromJson((json['user_answer'] as Map).cast<String, dynamic>())
             : null,
       );
 

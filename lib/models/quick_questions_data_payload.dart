@@ -61,7 +61,7 @@ class QuickQuestionsDataPayloadQuestion {
         questionType: json['question_type'] as String,
         ratingScaleSize: json['rating_scale_size'] as int?,
         userAnswer: json['user_answer'] != null
-            ? UserAnswer.fromJson(json['user_answer'] as Map<String, dynamic>)
+            ? UserAnswer.fromJson((json['user_answer'] as Map).cast<String, dynamic>())
             : null,
       );
 
@@ -145,15 +145,15 @@ class QuickQuestionsDataPayload {
         userLocale: json['user_locale'] as String,
         seenAt: json['seen_at'] as String,
         complete: json['complete'] != null
-            ? Complete.fromJson(json['complete'] as Map<String, dynamic>)
+            ? Complete.fromJson((json['complete'] as Map).cast<String, dynamic>())
             : null,
         questions: (json['questions'] as List<dynamic>)
             .map((e) => QuickQuestionsDataPayloadQuestion.fromJson(
-                e as Map<String, dynamic>))
+                (e as Map).cast<String, dynamic>()))
             .toList(),
         targetAudience: (json['target_audience'] as List<dynamic>?)
             ?.map((e) => QuickQuestionsDataPayloadTargetFilter.fromJson(
-                e as Map<String, dynamic>))
+                (e as Map).cast<String, dynamic>()))
             .toList(),
       );
 

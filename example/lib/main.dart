@@ -28,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen>
     implements TRSdkReadyCallback, TRErrorCallback, TRRewardCallback {
   final _plugin = TapresearchFlutterPlugin();
   bool _initializing = true;
+  TRPlacementDetails? _placementDetails;
+  bool? _isProfilerPlacement;
 
   @override
   void initState() {
@@ -37,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<void> _initializeSdk() async {
     await _plugin.initialize(
-      apiToken: Platform.isAndroid ? 'fb28e5e0572876db0790ecaf6c588598' : 'YOUR-IOS-API-TOKEN',
-      userIdentifier: Platform.isAndroid ? 'tr-sdk-test-user-46183135' : 'YOUR-IOS-USER-IDENTIFIER',
+      apiToken: Platform.isAndroid ? 'fb28e5e0572876db0790ecaf6c588598' : '100e9133abc21471c8cd373587e07515',
+      userIdentifier: Platform.isAndroid ? 'tr-sdk-test-user-46183135' : 'tr-sdk-test-ios-fultter-user',
       sdkReadyCallback: this,
       errorCallback: this,
       rewardCallback: this,
@@ -49,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void onTapResearchSdkReady() {
     debugPrint('TapResearch SDK is ready');
-    setState(() => _initializing = false);
+    if (mounted) {
+      setState(() => _initializing = false);
+    }
+    _getPlacementDetails(showFeedback: false);
   }
 
   // TRErrorCallback
@@ -95,54 +100,133 @@ class _HomeScreenState extends State<HomeScreen>
     messenger.showSnackBar(SnackBar(content: Text(message)));
   }
 
+  Future<void> _getPlacementDetails({bool showFeedback = true}) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final tag = _placementTagController.text;
+    final details = await _plugin.getPlacementDetails(
+      tag,
+      errorListener: this,
+    );
+    final isProfilerPlacement = details?.contentType == 'profiler';
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _placementDetails = details;
+      _isProfilerPlacement = details == null ? null : isProfilerPlacement;
+    });
+
+    if (details == null) {
+      if (showFeedback) {
+        messenger.showSnackBar(
+          SnackBar(content: Text('No placement details returned for $tag')),
+        );
+      }
+      return;
+    }
+
+    if (showFeedback) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            'content_type: ${details.contentType ?? 'unknown'}'
+            '${isProfilerPlacement ? ' (profiler)' : ' (not profiler)'}',
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('TapResearch Example')),
       body: Center(
-        child: _initializing
-            ? const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Please wait while initializing...'),
-                ],
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: TextField(
-                      controller: _placementTagController,
-                      decoration: const InputDecoration(
-                        labelText: 'Placement Tag',
-                        border: OutlineInputBorder(),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: _initializing
+              ? const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('Please wait while initializing...'),
+                  ],
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: TextField(
+                        controller: _placementTagController,
+                        decoration: const InputDecoration(
+                          labelText: 'Placement Tag',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _showStandardWall,
-                    child: const Text('Show Survey Wall'),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _getSurveys,
-                    child: const Text('Get Surveys'),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const SurveyWallPreviewScreen()),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _showStandardWall,
+                      child: Text(
+                        _isProfilerPlacement == true
+                            ? 'Show Profiler'
+                            : 'Show Survey Wall',
+                      ),
                     ),
-                    child: const Text('Survey Wall Preview'),
-                  ),
-                ],
-              ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _getSurveys,
+                      child: const Text('Get Surveys'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _getPlacementDetails,
+                      child: const Text('Get Placement Details'),
+                    ),
+                    const SizedBox(height: 16),
+                    if (_placementDetails != null) ...[
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 340),
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Placement Details',
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Text('Name: ${_placementDetails!.name ?? 'n/a'}'),
+                                Text(
+                                  'content_type: ${_placementDetails!.contentType ?? 'n/a'}',
+                                ),
+                                Text(
+                                  'Is profiler: ${_isProfilerPlacement == true ? 'Yes' : 'No'}',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const SurveyWallPreviewScreen()),
+                      ),
+                      child: const Text('Survey Wall Preview'),
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }

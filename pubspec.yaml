@@ -1,6 +1,6 @@
 name: tapresearch_flutter_plugin
 description: "In-app Monetization SDK via Surveys by TapResearch (iOS & Android)"
-version: 3.7.2--rc0
+version: 3.7.0--rc0
 homepage:
 
 environment:

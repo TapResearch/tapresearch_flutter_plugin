@@ -35,11 +35,11 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     companion object {
 
         // edit to be same as tapresearch_flutter_plugin version in pubspec.yaml!
-        private const val PLUGIN_VERSION = "3.7.2--rc0"
+        private const val PLUGIN_VERSION = "3.7.0--rc0"
     }
 
     private lateinit var channel: MethodChannel
-    private val mainHandler = Handler(Looper.getMainLooper())
+    private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(binding.binaryMessenger, "tapresearch_flutter_plugin")

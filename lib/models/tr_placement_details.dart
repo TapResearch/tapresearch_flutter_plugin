@@ -38,7 +38,7 @@ class TRPlacementDetails {
         saleTag: json['sale_tag'] as String?,
         bonusBarProgress: json['bonus_bar_progress'] != null
             ? TRBonusBarProgress.fromJson(
-                json['bonus_bar_progress'] as Map<String, dynamic>)
+                (json['bonus_bar_progress'] as Map).cast<String, dynamic>())
             : null,
       );
 

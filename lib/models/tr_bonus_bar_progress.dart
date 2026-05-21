@@ -49,10 +49,10 @@ class TRBonusBarProgress {
         currentCompletes: json['current_completes'] as int?,
         bonusWindowEndAt: json['bonus_window_end_at'] as String?,
         bonusTiers: (json['bonus_tiers'] as List<dynamic>?)
-            ?.map((e) => TRBonusTier.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => TRBonusTier.fromJson((e as Map).cast<String, dynamic>()))
             .toList(),
         error: json['error'] != null
-            ? TRError.fromJson(json['error'] as Map<String, dynamic>)
+            ? TRError.fromJson((json['error'] as Map).cast<String, dynamic>())
             : null,
       );
 
