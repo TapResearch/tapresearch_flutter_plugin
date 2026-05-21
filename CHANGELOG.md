@@ -1,3 +1,5 @@
-## 3.7.2--rc0
+## 3.7.0--rc0
 
-* Based on native SDKs 3.7.2
+* Initial release.  
+* Uses native iOS SDK 3.7.4--rc0
+* Uses native Android SDK 3.7.3--rc0
