@@ -26,7 +26,7 @@ Run the example app bundled within this plugin.
   
 - To run iOS example app:
   - cd example/ios
-  - remove Podfile.lock
+  - remove Podfile.lock and Pods
   - pod install
   - Using Xcode, open Runner.xcworkspace
   
