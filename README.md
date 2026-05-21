@@ -17,13 +17,20 @@ native Swift (iOS) and Kotlin (Android) implementations.
 Run the example app bundled within this plugin.
 
 > [!NOTE]
-> You must have Flutter, Android SDK, Android Studio, and/or Xcode installed on your computer.
+> You must have Flutter, Android SDK, Android Studio, Xcode, & Coco-Pods installed on your computer.
 
-- First thing, start your emulator or connected device, then: 
+- To run Android example app: 
+  - start your emulator or connect physical device
   - cd example
   - flutter run
-
-- Second, if you need to change the API TOKEN and/or User Identifier, please modify 
+  
+- To run iOS example app:
+  - cd example/ios
+  - remove Podfile.lock (you only need to do this once) 
+  - pod install (you only need to do this once)
+  - Using Xcode, open Runner.xcworkspace
+  
+- If you need to change the API TOKEN and/or User Identifier, please modify 
 example/lib/main.dart and re-run.  However, the values provided in the example should work fine.
 
 > [!NOTE]
