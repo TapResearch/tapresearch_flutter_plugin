@@ -26,8 +26,8 @@ Run the example app bundled within this plugin.
   
 - To run iOS example app:
   - cd example/ios
-  - remove Podfile.lock (you only need to do this once) 
-  - pod install (you only need to do this once)
+  - remove Podfile.lock
+  - pod install
   - Using Xcode, open Runner.xcworkspace
   
 - If you need to change the API TOKEN and/or User Identifier, please modify 
