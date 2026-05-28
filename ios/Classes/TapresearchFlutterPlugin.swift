@@ -107,7 +107,7 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
     TapResearchSDKDelegate, TapResearchRewardDelegate,
     TapResearchQuickQuestionDelegate, TapResearchSurveysDelegate {
 
-	@objc public static let packageVersion: String = "3.7.0--rc0"
+	@objc public static let packageVersion: String = "3.7.0--rc1"
 
     private var channel: FlutterMethodChannel!
     private var hasRewardCallback = false
@@ -238,6 +238,9 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
     ///   - result: Flutter result callback.
     /// - Returns: Nothing.
     private func handleInitialize(args: [String: Any], result: @escaping FlutterResult) {
+        guard let flutterVersion = args["flutterVersion"] as? String else {
+            return result(FlutterError(code: "INVALID_ARG", message: "flutterVersion required", details: nil))
+        }
         guard let apiToken = args["apiToken"] as? String else {
             return result(FlutterError(code: "INVALID_ARG", message: "apiToken required", details: nil))
         }

@@ -35,7 +35,7 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     companion object {
 
         // edit to be same as tapresearch_flutter_plugin version in pubspec.yaml!
-        private const val PLUGIN_VERSION = "3.7.0--rc0"
+        const val VERSION = "3.7.0--rc1"
     }
 
     private lateinit var channel: MethodChannel
@@ -44,7 +44,6 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(binding.binaryMessenger, "tapresearch_flutter_plugin")
         channel.setMethodCallHandler(this)
-        storePluginVersion(binding.getApplicationContext())
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -83,6 +82,8 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun handleInitialize(call: MethodCall, result: Result) {
+        val flutterVersion = call.argument<String>("flutterVersion")
+            ?: return result.error("INVALID_ARG", "flutterVersion required", null)
         val apiToken = call.argument<String>("apiToken")
             ?: return result.error("INVALID_ARG", "apiToken required", null)
         val userIdentifier = call.argument<String>("userIdentifier")
@@ -95,6 +96,8 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
         val initOptions = if (userAttributes != null || clearPreviousAttributes != null)
             TapInitOptions(userAttributes = userAttributes, clearPreviousAttributes = clearPreviousAttributes)
         else null
+
+        println("FlutterVersion in TapresearchFlutterPlugin: $flutterVersion")
 
         TapResearch.initialize(
             apiToken = apiToken,
@@ -361,12 +364,12 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(null)
     }
 
-    private fun storePluginVersion(context: Context) {
+    private fun storeDevEngineVersion(context: Context, flutterVersion: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 context.getSharedPreferences("tr_orca_params", 0).edit().putString(
-                    "flutter_plugin_version",
-                    PLUGIN_VERSION
+                    "dev_engine_version",
+                    flutterVersion
                 ).commit()
             }catch (_: Throwable){}
         }
