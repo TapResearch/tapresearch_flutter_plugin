@@ -3,6 +3,7 @@ allprojects {
         google()
         mavenCentral()
         maven("https://artifactory.tools.tapresearch.io/artifactory/tapresearch-android-sdk/")
+        mavenLocal()
     }
 }
 
