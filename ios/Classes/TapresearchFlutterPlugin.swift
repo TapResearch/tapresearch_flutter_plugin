@@ -248,6 +248,8 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
             return result(FlutterError(code: "INVALID_ARG", message: "userIdentifier required", details: nil))
         }
 
+		UserDefaults.standard.set(flutterVersion, forKey: "TREngineVersion")
+
         hasRewardCallback = args["hasRewardCallback"] as? Bool ?? false
         hasQqCallback = args["hasQqCallback"] as? Bool ?? false
         let userAttributes = args["userAttributes"] as? [String: Any]
