@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:tapresearch_flutter_plugin/tapresearch_flutter_plugin.dart';
@@ -7,18 +9,23 @@ void main() {
 
   group('TapresearchFlutterPlugin Integration Tests', () {
     final TapresearchFlutterPlugin plugin = TapresearchFlutterPlugin();
-
+    Completer<bool> completer = Completer<bool>();
     testWidgets('initialize and isReady check', (WidgetTester tester) async {
       // Basic initialization test
       await plugin.initialize(
         apiToken: 'fb28e5e0572876db0790ecaf6c588598',
         userIdentifier: 'tr-sdk-test-user-46183135',
-        sdkReadyCallback: _SdkReadyCallback(() {}),
-        errorCallback: _ErrorCallback((error) {}),
+        sdkReadyCallback: _SdkReadyCallback(() {
+          completer.complete(true);
+        }),
+        errorCallback: _ErrorCallback((error) {
+          completer.complete(false);
+        }),
       );
-
+      var result = await completer.future;
       final bool ready = await plugin.isReady();
-      expect(ready, isA<bool>());
+      expect(ready, true);
+      expect(result, true);
     });
 
     testWidgets('setUserIdentifier and sendUserAttributes', (WidgetTester tester) async {
@@ -31,24 +38,24 @@ void main() {
     });
 
     testWidgets('placement checks', (WidgetTester tester) async {
-      const String tag = 'integration-tag';
+      const String tag = 'earn-center';
 
       final bool canShow = await plugin.canShowContentForPlacement(
         tag,
         _ErrorCallback((e) {}),
       );
-      expect(canShow, isA<bool>());
+      expect(canShow, true);
 
       final bool hasSurveys = await plugin.hasSurveysForPlacement(
         tag,
         _ErrorCallback((e) {}),
       );
-      expect(hasSurveys, isA<bool>());
+      expect(hasSurveys, true);
     });
 
     testWidgets('getPlacementDetails', (WidgetTester tester) async {
       final details = await plugin.getPlacementDetails(
-        'integration-tag',
+        'earn-center',
         errorListener: _ErrorCallback((e) {}),
       );
       // Details might be null if placement doesn't exist, but it shouldn't crash
@@ -59,7 +66,7 @@ void main() {
 
     testWidgets('getSurveysForPlacement', (WidgetTester tester) async {
       final surveys = await plugin.getSurveysForPlacement(
-        'integration-tag',
+        'earn-center',
         _ErrorCallback((e) {}),
       );
       if (surveys != null) {
