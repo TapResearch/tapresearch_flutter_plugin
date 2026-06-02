@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -13,14 +14,15 @@ void main() {
     testWidgets('initialize and isReady check', (WidgetTester tester) async {
       // Basic initialization test
       await plugin.initialize(
-        apiToken: 'fb28e5e0572876db0790ecaf6c588598',
-        userIdentifier: 'tr-sdk-test-user-46183135',
+        apiToken: Platform.isAndroid ? 'fb28e5e0572876db0790ecaf6c588598' : '100e9133abc21471c8cd373587e07515',
+        userIdentifier: Platform.isAndroid ? 'tr-sdk-test-user-46183135' : 'tr-sdk-test-ios-flutter-user',
         sdkReadyCallback: _SdkReadyCallback(() {
           completer.complete(true);
         }),
         errorCallback: _ErrorCallback((error) {
           completer.complete(false);
         }),
+        userAttributes: {'integration_test': true, 'platform': 'flutter', 'isVip' : 1},
       );
       var result = await completer.future;
       final bool ready = await plugin.isReady();
