@@ -20,6 +20,7 @@ abstract class TapresearchFlutterPluginPlatform extends PlatformInterface {
   }
 
   Future<void> initialize({
+    required String flutterVersion,
     required String apiToken,
     required String userIdentifier,
     TRRewardCallback? rewardCallback,

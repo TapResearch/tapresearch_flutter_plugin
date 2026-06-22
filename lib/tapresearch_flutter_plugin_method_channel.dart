@@ -91,6 +91,7 @@ class MethodChannelTapresearchFlutterPlugin
 
   @override
   Future<void> initialize({
+    required String flutterVersion,
     required String apiToken,
     required String userIdentifier,
     TRRewardCallback? rewardCallback,
@@ -106,6 +107,7 @@ class MethodChannelTapresearchFlutterPlugin
     if (qqDataCallback != null) _qqDataCallback = qqDataCallback;
 
     await methodChannel.invokeMethod<void>('initialize', {
+      'flutterVersion' : flutterVersion,
       'apiToken': apiToken,
       'userIdentifier': userIdentifier,
       'hasRewardCallback': rewardCallback != null,

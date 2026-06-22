@@ -2,6 +2,7 @@
 
 package com.tapresearch.tapresearch_flutter_plugin
 
+import java.lang.ref.WeakReference
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -35,16 +36,18 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     companion object {
 
         // edit to be same as tapresearch_flutter_plugin version in pubspec.yaml!
-        private const val PLUGIN_VERSION = "3.7.0--rc0"
+        const val VERSION = "3.7.0--rc1"
     }
+
+    private var contextG: WeakReference<Context>? = null
 
     private lateinit var channel: MethodChannel
     private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        this.contextG = WeakReference(binding.getApplicationContext())
         channel = MethodChannel(binding.binaryMessenger, "tapresearch_flutter_plugin")
         channel.setMethodCallHandler(this)
-        storePluginVersion(binding.getApplicationContext())
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -83,6 +86,8 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun handleInitialize(call: MethodCall, result: Result) {
+        val flutterVersion = call.argument<String>("flutterVersion")
+            ?: return result.error("INVALID_ARG", "flutterVersion required", null)
         val apiToken = call.argument<String>("apiToken")
             ?: return result.error("INVALID_ARG", "apiToken required", null)
         val userIdentifier = call.argument<String>("userIdentifier")
@@ -96,6 +101,7 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
             TapInitOptions(userAttributes = userAttributes, clearPreviousAttributes = clearPreviousAttributes)
         else null
 
+        storeAttributes(contextG?.get(), flutterVersion)
         TapResearch.initialize(
             apiToken = apiToken,
             userIdentifier = userIdentifier,
@@ -361,13 +367,17 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(null)
     }
 
-    private fun storePluginVersion(context: Context) {
+    private fun storeAttributes(context: Context?, flutterVersion: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                context.getSharedPreferences("tr_orca_params", 0).edit().putString(
-                    "flutter_plugin_version",
-                    PLUGIN_VERSION
-                ).commit()
+                context?.let {
+                    it.getSharedPreferences("tr_orca_params", 0).edit()
+                        .putString("dev_platform", "flutter")
+                        .putString("dev_version", VERSION)
+                        .putString("dev_engine_version", flutterVersion)
+                        .commit()
+                }
+                contextG = null
             }catch (_: Throwable){}
         }
     }
