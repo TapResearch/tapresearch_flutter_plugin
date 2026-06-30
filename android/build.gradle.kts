@@ -18,8 +18,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven("https://artifactory.tools.tapresearch.io/artifactory/tapresearch-android-sdk/")
-        mavenLocal()
     }
 }
 
@@ -77,8 +75,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.0.0")
 
     // required by tap research sdk
-    // implementation("com.tapresearch:tapsdk:3.8.0--beta04-local")
-    implementation("com.tapresearch:tapsdk:3.7.3--rc2")
+    implementation("com.tapresearch:tapsdk:3.7.3--rc3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
     implementation("androidx.lifecycle:lifecycle-process:2.6.1")
     implementation("com.google.android.gms:play-services-ads-identifier:18.1.0")
