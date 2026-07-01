@@ -39,13 +39,13 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
         const val VERSION = "3.7.0--rc1"
     }
 
-    private var contextG: WeakReference<Context>? = null
+    private var applicationContext: WeakReference<Context>? = null
 
     private lateinit var channel: MethodChannel
     private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        this.contextG = WeakReference(binding.getApplicationContext())
+        this.applicationContext = WeakReference(binding.getApplicationContext())
         channel = MethodChannel(binding.binaryMessenger, "tapresearch_flutter_plugin")
         channel.setMethodCallHandler(this)
     }
@@ -101,7 +101,7 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
             TapInitOptions(userAttributes = userAttributes, clearPreviousAttributes = clearPreviousAttributes)
         else null
 
-        storeAttributes(contextG?.get(), flutterVersion)
+        storeAttributes(applicationContext?.get(), flutterVersion)
         TapResearch.initialize(
             apiToken = apiToken,
             userIdentifier = userIdentifier,
@@ -377,7 +377,7 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
                         .putString("dev_engine_version", flutterVersion)
                         .commit()
                 }
-                contextG = null
+                applicationContext = null
             }catch (_: Throwable){}
         }
     }
