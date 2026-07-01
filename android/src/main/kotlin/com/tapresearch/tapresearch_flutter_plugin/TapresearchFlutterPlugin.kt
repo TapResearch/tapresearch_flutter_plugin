@@ -39,13 +39,13 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
         const val VERSION = "3.7.0--rc1"
     }
 
-    private var context: WeakReference<Context>? = null
+    private var applicationContext: WeakReference<Context>? = null
 
     private lateinit var channel: MethodChannel
     private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        this.context = WeakReference(binding.getApplicationContext())
+        this.applicationContext = WeakReference(binding.getApplicationContext())
         channel = MethodChannel(binding.binaryMessenger, "tapresearch_flutter_plugin")
         channel.setMethodCallHandler(this)
     }
@@ -101,7 +101,7 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
             TapInitOptions(userAttributes = userAttributes, clearPreviousAttributes = clearPreviousAttributes)
         else null
 
-        storeDevEngineVersion(context?.get(), flutterVersion)
+        storeAttributes(applicationContext?.get(), flutterVersion)
         TapResearch.initialize(
             apiToken = apiToken,
             userIdentifier = userIdentifier,
@@ -367,14 +367,15 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(null)
     }
 
-    private fun storeDevEngineVersion(context: Context?, flutterVersion: String) {
+    private fun storeAttributes(context: Context?, flutterVersion: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 context?.let {
-                    it.getSharedPreferences("tr_orca_params", 0).edit().putString(
-                        "dev_engine_version",
-                        flutterVersion
-                    ).commit()
+                    it.getSharedPreferences("tr_orca_params", 0).edit()
+                        .putString("dev_platform", "flutter")
+                        .putString("dev_version", VERSION)
+                        .putString("dev_engine_version", flutterVersion)
+                        .commit()
                 }
             }catch (_: Throwable){}
         }
