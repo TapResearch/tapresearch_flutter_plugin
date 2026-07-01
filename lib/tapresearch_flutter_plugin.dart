@@ -1,5 +1,4 @@
 import 'package:dart_flutter_version/dart_flutter_version.dart';
-import 'package:pub_semver/pub_semver.dart';
 
 import 'callbacks/callbacks.dart';
 import 'models/models.dart';
