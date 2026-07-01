@@ -256,7 +256,7 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
         let clearPrevious = args["clearPreviousAttributes"] as? Bool ?? false
 
 		UserDefaults.standard.set("flutter", forKey: "TRDevPlatform")
-		UserDefaults.standard.set(packageVersion, forKey: "TRDevPlatformVersion")
+		UserDefaults.standard.set(TapresearchFlutterPlugin.packageVersion, forKey: "TRDevPlatformVersion")
 		UserDefaults.standard.set(flutterVersion, forKey: "TREngineVersion")
 
         if let userAttributes {
