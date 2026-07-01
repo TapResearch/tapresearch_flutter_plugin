@@ -377,7 +377,6 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
                         .putString("dev_engine_version", flutterVersion)
                         .commit()
                 }
-                applicationContext = null
             }catch (_: Throwable){}
         }
     }
