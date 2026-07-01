@@ -1,7 +1,8 @@
 ## 3.7.0--rc1
 
 * Plugin to send basic reporting attributes (dev_platform, dev_version, dev_engine_version) in order to provide better support.
-* Android Updated to 3.7.3--rc2
+* Fixed Android issue where survey wall activity starts as a separate process.
+* Updated native Android SDK to 3.7.3--rc3
 
 
 ## 3.7.0--rc0
