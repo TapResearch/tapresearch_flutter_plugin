@@ -14,7 +14,6 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven("https://artifactory.tools.tapresearch.io/artifactory/tapresearch-android-sdk/")
     }
 }
 
