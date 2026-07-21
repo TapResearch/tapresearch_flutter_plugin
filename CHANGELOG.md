@@ -1,6 +1,11 @@
 ## 3.8.0--rc0
 
-* 
+* Android SDK updated to 3.8.0--rc1 (rc0 intentionally skipped)
+  - Edge-to-edge wall
+  - Performance improvements
+  
+* iOS SDK updated to 3.8.0--rc0
+
 
 ## 3.7.0--rc1
 
