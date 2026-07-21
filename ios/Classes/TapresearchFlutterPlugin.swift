@@ -107,7 +107,7 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
     TapResearchSDKDelegate, TapResearchRewardDelegate,
     TapResearchQuickQuestionDelegate, TapResearchSurveysDelegate {
 
-	@objc public static let packageVersion: String = "3.7.0--rc1"
+	@objc public static let packageVersion: String = "3.8.0--rc0"
 
     private var channel: FlutterMethodChannel!
     private var hasRewardCallback = false
