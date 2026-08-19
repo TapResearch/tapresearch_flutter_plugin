@@ -1,6 +1,6 @@
 ## 3.8.0--rc1
 
-* Android SDK updated to 3.8.0--rc2
+* Android SDK updated to 3.8.0--rc1
 * iOS SDK updated to 3.8.0--rc1
 
 
