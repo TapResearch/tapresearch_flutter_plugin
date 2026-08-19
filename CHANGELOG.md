@@ -1,3 +1,8 @@
+## 3.8.0--rc1
+
+* iOS SDK updated to 3.8.0--rc1
+
+
 ## 3.8.0--rc0
 
 * Android SDK updated to 3.8.0--rc1 (rc0 intentionally skipped)
