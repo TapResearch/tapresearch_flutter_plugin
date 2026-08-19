@@ -2,10 +2,10 @@ PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
-  - TapResearch (3.8.0--rc0)
-  - tapresearch_flutter_plugin (3.8.0--rc0):
+  - TapResearch (3.8.0--rc1)
+  - tapresearch_flutter_plugin (3.8.0--rc1):
     - Flutter
-    - TapResearch (= 3.8.0--rc0)
+    - TapResearch (= 3.8.0--rc1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -27,8 +27,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
-  TapResearch: a0c79ae3e58f7ecfaabe8679dfa59116943c8b3f
-  tapresearch_flutter_plugin: a9d97b67114cef45dfe80dc88188ffd79322eb00
+  TapResearch: 09b96beccf7985400a2fccd7980c45d162e021a8
+  tapresearch_flutter_plugin: 9a7ede7d974ba4d0910d215a318acfba2147549c
 
 PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
 
