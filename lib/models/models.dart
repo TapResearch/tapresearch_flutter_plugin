@@ -7,6 +7,7 @@ export 'tr_survey.dart';
 export 'quick_questions_data_payload.dart';
 export 'quick_question.dart';
 export 'tr_profile_answer.dart';
+export 'tr_qualification_answer.dart';
 export 'tr_qualification.dart';
 export 'tr_qualifications_result.dart';
 export 'tr_qualifications_response.dart';

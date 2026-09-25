@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:tapresearch_flutter_plugin/tapresearch_flutter_plugin.dart';
+import 'profiler_screen.dart';
 
 final _placementTagController = TextEditingController(text: 'earn-center');
 
@@ -31,6 +32,13 @@ class _HomeScreenState extends State<HomeScreen>
   TRPlacementDetails? _placementDetails;
   bool? _isProfilerPlacement;
 
+  final _apiToken = Platform.isAndroid
+      ? 'fb28e5e0572876db0790ecaf6c588598'
+      : '100e9133abc21471c8cd373587e07515';
+  final _userIdentifier = Platform.isAndroid
+      ? 'tr-sdk-test-user-4902100'
+      : 'tr-sdk-test-ios-flutter-user';
+
   @override
   void initState() {
     super.initState();
@@ -39,8 +47,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<void> _initializeSdk() async {
     await _plugin.initialize(
-      apiToken: Platform.isAndroid ? 'fb28e5e0572876db0790ecaf6c588598' : '100e9133abc21471c8cd373587e07515',
-      userIdentifier: Platform.isAndroid ? 'tr-sdk-test-user-46183135' : 'tr-sdk-test-ios-flutter-user',
+      apiToken: _apiToken,
+      userIdentifier: _userIdentifier,
       sdkReadyCallback: this,
       errorCallback: this,
       rewardCallback: this,
@@ -226,9 +234,15 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () {
-                        // TODO: Implement Profiler action
-                      },
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProfilerScreen(
+                            apiToken: _apiToken,
+                            userIdentifier: _userIdentifier,
+                          ),
+                        ),
+                      ),
                       child: const Text('Profiler'),
                     ),
                     const SizedBox(height: 16),

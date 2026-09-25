@@ -348,7 +348,14 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
                 "question_text" to q.questionText,
                 "en_translation" to q.enTranslation,
                 "answer_type" to q.answerType,
-                "qualification_answers" to q.qualificationAnswers,
+                "qualification_answers" to q.qualificationAnswers?.map { ans: Any ->
+                    val clazz = ans.javaClass
+                    mapOf(
+                        "option_text" to try { clazz.getMethod("getOptionText").invoke(ans) } catch (_: Throwable) { null },
+                        "en_translation" to try { clazz.getMethod("getEnTranslation").invoke(ans) } catch (_: Throwable) { null },
+                        "pre_code" to try { clazz.getMethod("getPreCode").invoke(ans) } catch (_: Throwable) { null },
+                    )
+                },
                 "previous_error" to q.previousError,
             )
         },
