@@ -125,7 +125,7 @@ class _PagedProfilerScreenState extends State<PagedProfilerScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paged Native Profiler'),
+        title: const Text('Paged Profiler'),
         leading: BackButton(onPressed: () => Navigator.pop(context)),
       ),
       body: _buildBody(),
@@ -172,7 +172,7 @@ class _PagedProfilerScreenState extends State<PagedProfilerScreen>
       padding: const EdgeInsets.all(16),
       children: [
         Text(
-          'Paged Native Profiler',
+          'Paged Profiler',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(height: 8),

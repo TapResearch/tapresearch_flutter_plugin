@@ -167,6 +167,18 @@ class _HomeScreenState extends State<HomeScreen>
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Text(
+                      'API Token: $_apiToken',
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'User ID: $_userIdentifier',
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: TextField(

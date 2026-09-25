@@ -111,7 +111,7 @@ class _ProfilerScreenState extends State<ProfilerScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Native Profiler'),
+        title: const Text('Profiler'),
         leading: BackButton(onPressed: () => Navigator.pop(context)),
       ),
       body: _buildBody(),
@@ -156,7 +156,7 @@ class _ProfilerScreenState extends State<ProfilerScreen>
       padding: const EdgeInsets.all(16),
       children: [
         Text(
-          'Native Profiler',
+          'Profiler',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(height: 8),
