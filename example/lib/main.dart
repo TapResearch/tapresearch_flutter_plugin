@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:tapresearch_flutter_plugin/tapresearch_flutter_plugin.dart';
 import 'profiler_screen.dart';
+import 'paged_profiler_screen.dart';
 
 final _placementTagController = TextEditingController(text: 'earn-center');
 
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen>
       ? 'fb28e5e0572876db0790ecaf6c588598'
       : '100e9133abc21471c8cd373587e07515';
   final _userIdentifier = Platform.isAndroid
-      ? 'tr-sdk-test-user-4902100'
+      ? 'tr-sdk-test-user-4902222'
       : 'tr-sdk-test-ios-flutter-user';
 
   @override
@@ -247,9 +248,15 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () {
-                        // TODO: Implement Paged Profiler action
-                      },
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PagedProfilerScreen(
+                            apiToken: _apiToken,
+                            userIdentifier: _userIdentifier,
+                          ),
+                        ),
+                      ),
                       child: const Text('Paged Profiler'),
                     ),
                   ],
