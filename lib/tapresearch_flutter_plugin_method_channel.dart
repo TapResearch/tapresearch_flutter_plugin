@@ -273,11 +273,9 @@ class MethodChannelTapresearchFlutterPlugin
     required String userIdentifier,
     required String countryCode,
     required TRQualificationsResponseListener listener,
-    TRErrorCallback? errorCallback,
   }) async {
     final callId = _newCallId();
     _qualificationsCallbacks[callId] = listener;
-    if (errorCallback != null) _errorCallbacks[callId] = errorCallback;
 
     await methodChannel.invokeMethod<void>('getProfilingQualifications', {
       'callId': callId,
@@ -294,11 +292,9 @@ class MethodChannelTapresearchFlutterPlugin
     required String countryCode,
     required List<Map<String, dynamic>> answers,
     required TRQualificationsResponseListener listener,
-    TRErrorCallback? errorCallback,
   }) async {
     final callId = _newCallId();
     _qualificationsCallbacks[callId] = listener;
-    if (errorCallback != null) _errorCallbacks[callId] = errorCallback;
 
     await methodChannel.invokeMethod<void>('sendProfilingQualifications', {
       'callId': callId,

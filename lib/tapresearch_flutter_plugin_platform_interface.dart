@@ -109,7 +109,6 @@ abstract class TapresearchFlutterPluginPlatform extends PlatformInterface {
     required String userIdentifier,
     required String countryCode,
     required TRQualificationsResponseListener listener,
-    TRErrorCallback? errorCallback,
   }) {
     throw UnimplementedError('getProfilingQualifications() has not been implemented.');
   }
@@ -120,7 +119,6 @@ abstract class TapresearchFlutterPluginPlatform extends PlatformInterface {
     required String countryCode,
     required List<Map<String, dynamic>> answers,
     required TRQualificationsResponseListener listener,
-    TRErrorCallback? errorCallback,
   }) {
     throw UnimplementedError('sendProfilingQualifications() has not been implemented.');
   }

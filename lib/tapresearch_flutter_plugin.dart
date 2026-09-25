@@ -125,14 +125,12 @@ class TapresearchFlutterPlugin {
     required String userIdentifier,
     required String countryCode,
     required TRQualificationsResponseListener listener,
-    TRErrorCallback? errorCallback,
   }) {
     return TapresearchFlutterPluginPlatform.instance.getProfilingQualifications(
       apiToken: apiToken,
       userIdentifier: userIdentifier,
       countryCode: countryCode,
       listener: listener,
-      errorCallback: errorCallback,
     );
   }
 
@@ -142,7 +140,6 @@ class TapresearchFlutterPlugin {
     required String countryCode,
     required List<Map<String, dynamic>> answers,
     required TRQualificationsResponseListener listener,
-    TRErrorCallback? errorCallback,
   }) {
     return TapresearchFlutterPluginPlatform.instance.sendProfilingQualifications(
       apiToken: apiToken,
@@ -150,7 +147,6 @@ class TapresearchFlutterPlugin {
       countryCode: countryCode,
       answers: answers,
       listener: listener,
-      errorCallback: errorCallback,
     );
   }
 }

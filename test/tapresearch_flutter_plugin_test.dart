@@ -193,7 +193,6 @@ class MockPlatform
     required String userIdentifier,
     required String countryCode,
     required TRQualificationsResponseListener listener,
-    TRErrorCallback? errorCallback,
   }) async {
     lastMethod = 'getProfilingQualifications';
     lastArgs = {'apiToken': apiToken, 'userIdentifier': userIdentifier, 'countryCode': countryCode};
@@ -207,7 +206,6 @@ class MockPlatform
     required String countryCode,
     required List<Map<String, dynamic>> answers,
     required TRQualificationsResponseListener listener,
-    TRErrorCallback? errorCallback,
   }) async {
     lastMethod = 'sendProfilingQualifications';
     lastArgs = {'apiToken': apiToken, 'userIdentifier': userIdentifier, 'countryCode': countryCode, 'answers': answers};

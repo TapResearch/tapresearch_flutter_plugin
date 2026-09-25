@@ -224,6 +224,20 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       child: const Text('Survey Wall Preview'),
                     ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        // TODO: Implement Profiler action
+                      },
+                      child: const Text('Profiler'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        // TODO: Implement Paged Profiler action
+                      },
+                      child: const Text('Paged Profiler'),
+                    ),
                   ],
                 ),
         ),
