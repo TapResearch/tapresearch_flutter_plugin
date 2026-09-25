@@ -23,6 +23,7 @@ class MethodChannelTapresearchFlutterPlugin
   final Map<int, TRErrorCallback> _errorCallbacks = {};
   final Map<int, TRContentCallback> _contentCallbacks = {};
   final Map<int, TRGrantBoostResponseListener> _grantBoostCallbacks = {};
+  final Map<int, TRQualificationsResponseListener> _qualificationsCallbacks = {};
 
   MethodChannelTapresearchFlutterPlugin() {
     methodChannel.setMethodCallHandler(_handleNativeCall);
@@ -85,6 +86,18 @@ class MethodChannelTapresearchFlutterPlugin
         final response = TRGrantBoostResponse.fromJson(args);
         if (callId != null) {
           _grantBoostCallbacks.remove(callId)?.onGrantBoostResponse(response);
+        }
+
+      case 'onQualificationsResponse':
+        final args = Map<String, dynamic>.from(call.arguments as Map);
+        final callId = args['callId'] as int?;
+        final responseMap = args['response'] is Map
+            ? Map<String, dynamic>.from(args['response'] as Map)
+            : <String, dynamic>{};
+        final response = TRQualificationsResponse.fromJson(responseMap);
+        if (callId != null) {
+          _qualificationsCallbacks.remove(callId)?.onReceivedQualificationsResponse(response);
+          _errorCallbacks.remove(callId);
         }
     }
   }
@@ -252,5 +265,47 @@ class MethodChannelTapresearchFlutterPlugin
     return result != null
         ? TRPlacementDetails.fromJson(Map<String, dynamic>.from(result))
         : null;
+  }
+
+  @override
+  Future<void> getProfilingQualifications({
+    required String apiToken,
+    required String userIdentifier,
+    required String countryCode,
+    required TRQualificationsResponseListener listener,
+    TRErrorCallback? errorCallback,
+  }) async {
+    final callId = _newCallId();
+    _qualificationsCallbacks[callId] = listener;
+    if (errorCallback != null) _errorCallbacks[callId] = errorCallback;
+
+    await methodChannel.invokeMethod<void>('getProfilingQualifications', {
+      'callId': callId,
+      'apiToken': apiToken,
+      'userIdentifier': userIdentifier,
+      'countryCode': countryCode,
+    });
+  }
+
+  @override
+  Future<void> sendProfilingQualifications({
+    required String apiToken,
+    required String userIdentifier,
+    required String countryCode,
+    required List<Map<String, dynamic>> answers,
+    required TRQualificationsResponseListener listener,
+    TRErrorCallback? errorCallback,
+  }) async {
+    final callId = _newCallId();
+    _qualificationsCallbacks[callId] = listener;
+    if (errorCallback != null) _errorCallbacks[callId] = errorCallback;
+
+    await methodChannel.invokeMethod<void>('sendProfilingQualifications', {
+      'callId': callId,
+      'apiToken': apiToken,
+      'userIdentifier': userIdentifier,
+      'countryCode': countryCode,
+      'answers': answers,
+    });
   }
 }

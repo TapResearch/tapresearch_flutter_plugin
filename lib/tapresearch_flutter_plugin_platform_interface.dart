@@ -103,4 +103,25 @@ abstract class TapresearchFlutterPluginPlatform extends PlatformInterface {
       {TRErrorCallback? errorListener}) {
     throw UnimplementedError('getPlacementDetails() has not been implemented.');
   }
+
+  Future<void> getProfilingQualifications({
+    required String apiToken,
+    required String userIdentifier,
+    required String countryCode,
+    required TRQualificationsResponseListener listener,
+    TRErrorCallback? errorCallback,
+  }) {
+    throw UnimplementedError('getProfilingQualifications() has not been implemented.');
+  }
+
+  Future<void> sendProfilingQualifications({
+    required String apiToken,
+    required String userIdentifier,
+    required String countryCode,
+    required List<Map<String, dynamic>> answers,
+    required TRQualificationsResponseListener listener,
+    TRErrorCallback? errorCallback,
+  }) {
+    throw UnimplementedError('sendProfilingQualifications() has not been implemented.');
+  }
 }

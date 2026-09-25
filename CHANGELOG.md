@@ -1,3 +1,14 @@
+## 3.8.1--beta01
+
+* Added two user profiling methods:
+  - getProfilingQualifications
+  - sendProfilingQualifications
+  - These allow publishers to make their own custom profiler screens based on remaining qualification
+    questions and submit them to TapResearch. See example.
+  
+* iOS SDK updated to 3.8.1--beta01
+* Android SDK updated to 3.8.1--beta01
+
 ## 3.8.0--rc1
 
 * iOS SDK updated to 3.8.0--rc1

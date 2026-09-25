@@ -5,3 +5,4 @@ export 'tr_qq_data_callback.dart';
 export 'tr_error_callback.dart';
 export 'tr_content_callback.dart';
 export 'tr_grant_boost_response_listener.dart';
+export 'tr_qualifications_response_listener.dart';

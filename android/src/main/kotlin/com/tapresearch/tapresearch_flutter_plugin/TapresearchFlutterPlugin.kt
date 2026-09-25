@@ -36,7 +36,7 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     companion object {
 
         // edit to be same as tapresearch_flutter_plugin version in pubspec.yaml!
-        const val VERSION = "3.8.0--rc1"
+        const val VERSION = "3.8.1--beta01"
     }
 
     private var applicationContext: WeakReference<Context>? = null
@@ -77,6 +77,8 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
             "showSurveyForPlacement" -> handleShowSurveyForPlacement(call, result)
             "grantBoost" -> handleGrantBoost(call, result)
             "getPlacementDetails" -> handleGetPlacementDetails(call, result)
+            "getProfilingQualifications" -> handleGetProfilingQualifications(call, result)
+            "sendProfilingQualifications" -> handleSendProfilingQualifications(call, result)
             else -> result.notImplemented()
         }
     }
@@ -272,11 +274,97 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
         result.success(details?.let { placementDetailsToMap(it) })
     }
 
+    private fun handleGetProfilingQualifications(call: MethodCall, result: Result) {
+        val callId = call.argument<Int>("callId") ?: 0
+        val apiToken = call.argument<String>("apiToken")
+            ?: return result.error("INVALID_ARG", "apiToken required", null)
+        val userIdentifier = call.argument<String>("userIdentifier")
+            ?: return result.error("INVALID_ARG", "userIdentifier required", null)
+        val countryCode = call.argument<String>("countryCode")
+            ?: return result.error("INVALID_ARG", "countryCode required", null)
+
+        TapResearch.getProfilingQualifications(
+            apiToken = apiToken,
+            userIdentifier = userIdentifier,
+            countryCode = countryCode,
+            qualificationsResponseListener = object : com.tapresearch.tapsdk.callback.TRQualificationsResponseListener {
+                override fun onReceivedQualificationsResponse(response: com.tapresearch.tapsdk.models.TRQualificationsResponse) {
+                    invokeOnMain("onQualificationsResponse", mapOf("callId" to callId, "response" to qualificationsResponseToMap(response)))
+                }
+            }
+        )
+        result.success(null)
+    }
+
+    private fun handleSendProfilingQualifications(call: MethodCall, result: Result) {
+        val callId = call.argument<Int>("callId") ?: 0
+        val apiToken = call.argument<String>("apiToken")
+            ?: return result.error("INVALID_ARG", "apiToken required", null)
+        val userIdentifier = call.argument<String>("userIdentifier")
+            ?: return result.error("INVALID_ARG", "userIdentifier required", null)
+        val countryCode = call.argument<String>("countryCode")
+            ?: return result.error("INVALID_ARG", "countryCode required", null)
+        val answersList = call.argument<List<Any>>("answers")
+            ?: return result.error("INVALID_ARG", "answers required", null)
+
+        val profileAnswers = answersList.map {
+            val map = it as Map<String, Any>
+            val qId = map["question_id"] ?: map["questionId"]
+            val ansList = map["actual_user_answer"] ?: map["actualUserAnswer"]
+            com.tapresearch.tapsdk.models.TRProfileAnswer(
+                questionId = (qId as? Number)?.toInt() ?: 0,
+                actualUserAnswer = (ansList as? List<*>)?.map { ans -> ans.toString() } ?: emptyList()
+            )
+        }
+
+        TapResearch.sendProfilingQualifications(
+            apiToken = apiToken,
+            userIdentifier = userIdentifier,
+            countryCode = countryCode,
+            answersForSubmission = profileAnswers,
+            qualificationsResponseListener = object : com.tapresearch.tapsdk.callback.TRQualificationsResponseListener {
+                override fun onReceivedQualificationsResponse(response: com.tapresearch.tapsdk.models.TRQualificationsResponse) {
+                    invokeOnMain("onQualificationsResponse", mapOf("callId" to callId, "response" to qualificationsResponseToMap(response)))
+                }
+            }
+        )
+        result.success(null)
+    }
+
     // MARK: - Serialization helpers
 
     private fun errorToMap(error: TRError): Map<String, Any?> = mapOf(
         "error_code" to error.code,
         "message" to error.description,
+    )
+
+    private fun qualificationsResponseToMap(response: com.tapresearch.tapsdk.models.TRQualificationsResponse): Map<String, Any?> = mapOf(
+        "country_code" to response.countryCode,
+        "locale" to response.locale,
+        "is_profiled" to response.isProfiled,
+        "qualifications" to response.qualifications?.map { q ->
+            mapOf(
+                "question_id" to q.questionId,
+                "question_text" to q.questionText,
+                "en_translation" to q.enTranslation,
+                "answer_type" to q.answerType,
+                "qualification_answers" to q.qualificationAnswers,
+                "previous_error" to q.previousError,
+            )
+        },
+        "error" to response.error?.let { errorToMap(it) },
+        "qualifications_result" to response.qualificationsResult?.let { res ->
+            mapOf(
+                "accepted_count" to res.acceptedCount,
+                "invalid_count" to res.invalidCount,
+                "errors" to res.errors?.map { err: Any ->
+                    mapOf(
+                        "error_code" to 0,
+                        "message" to err.toString(),
+                    )
+                },
+            )
+        },
     )
 
     private fun rewardToMap(reward: TRReward): Map<String, Any?> = mapOf(

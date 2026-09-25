@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'tapresearch_flutter_plugin'
-  s.version          = '3.8.0--rc1'
+  s.version          = '3.8.1--beta01'
   s.summary          = 'In-app Monetization SDK (iOS & Android) via Surveys by TapResearch'
   s.description      = <<-DESC
 In-app Monetization SDK via Surveys by TapResearch (iOS & Android)

@@ -186,6 +186,33 @@ class MockPlatform
     lastArgs = {'placementTag': placementTag};
     return placementDetailsResult;
   }
+
+  @override
+  Future<void> getProfilingQualifications({
+    required String apiToken,
+    required String userIdentifier,
+    required String countryCode,
+    required TRQualificationsResponseListener listener,
+    TRErrorCallback? errorCallback,
+  }) async {
+    lastMethod = 'getProfilingQualifications';
+    lastArgs = {'apiToken': apiToken, 'userIdentifier': userIdentifier, 'countryCode': countryCode};
+    listener.onReceivedQualificationsResponse(TRQualificationsResponse(countryCode: 'US'));
+  }
+
+  @override
+  Future<void> sendProfilingQualifications({
+    required String apiToken,
+    required String userIdentifier,
+    required String countryCode,
+    required List<Map<String, dynamic>> answers,
+    required TRQualificationsResponseListener listener,
+    TRErrorCallback? errorCallback,
+  }) async {
+    lastMethod = 'sendProfilingQualifications';
+    lastArgs = {'apiToken': apiToken, 'userIdentifier': userIdentifier, 'countryCode': countryCode, 'answers': answers};
+    listener.onReceivedQualificationsResponse(TRQualificationsResponse(countryCode: 'US'));
+  }
 }
 
 // ---------------------------------------------------------------------------

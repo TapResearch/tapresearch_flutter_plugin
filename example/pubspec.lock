@@ -253,7 +253,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.8.0--rc0"
+    version: "3.8.0--rc1"
   term_glyph:
     dependency: transitive
     description:

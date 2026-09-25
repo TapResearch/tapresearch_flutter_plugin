@@ -119,4 +119,38 @@ class TapresearchFlutterPlugin {
     return TapresearchFlutterPluginPlatform.instance
         .getPlacementDetails(placementTag, errorListener: errorListener);
   }
+
+  Future<void> getProfilingQualifications({
+    required String apiToken,
+    required String userIdentifier,
+    required String countryCode,
+    required TRQualificationsResponseListener listener,
+    TRErrorCallback? errorCallback,
+  }) {
+    return TapresearchFlutterPluginPlatform.instance.getProfilingQualifications(
+      apiToken: apiToken,
+      userIdentifier: userIdentifier,
+      countryCode: countryCode,
+      listener: listener,
+      errorCallback: errorCallback,
+    );
+  }
+
+  Future<void> sendProfilingQualifications({
+    required String apiToken,
+    required String userIdentifier,
+    required String countryCode,
+    required List<Map<String, dynamic>> answers,
+    required TRQualificationsResponseListener listener,
+    TRErrorCallback? errorCallback,
+  }) {
+    return TapresearchFlutterPluginPlatform.instance.sendProfilingQualifications(
+      apiToken: apiToken,
+      userIdentifier: userIdentifier,
+      countryCode: countryCode,
+      answers: answers,
+      listener: listener,
+      errorCallback: errorCallback,
+    );
+  }
 }
