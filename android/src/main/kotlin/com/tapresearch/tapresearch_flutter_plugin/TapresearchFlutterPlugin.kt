@@ -48,6 +48,8 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
         this.applicationContext = WeakReference(binding.getApplicationContext())
         channel = MethodChannel(binding.binaryMessenger, "tapresearch_flutter_plugin")
         channel.setMethodCallHandler(this)
+
+        // binding.getApplicationContext().getSharedPreferences("tr_orca_params", 0).edit().putString("device_id", "").apply()
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
