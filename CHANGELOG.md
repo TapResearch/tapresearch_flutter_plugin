@@ -1,13 +1,16 @@
 ## 3.8.1--beta01
 
-* Added two user profiling methods:
-  - getProfilingQualifications
-  - sendProfilingQualifications
-  - These allow publishers to make their own custom profiler screens based on remaining qualification
-    questions and submit them to TapResearch. See example.
-  
-* iOS SDK updated to 3.8.1--beta01
-* Android SDK updated to 3.8.1--beta01
+* **User Profiling APIs Added:**
+  - `getProfilingQualifications`: Fetch remaining qualification questions to build custom native profiler flows.
+  - `sendProfilingQualifications`: Submit user profile answers back to TapResearch.
+* **New Dart Models & Callbacks:**
+  - Added `TRQualificationsResponse`, `TRQualificationsResult`, `TRQualification`, `TRQualificationAnswer`, and `TRProfileAnswer`.
+  - Added `TRQualificationsResponseListener` callback interface.
+* **Example App Enhancements:**
+  - Added interactive **Profiler** and **Paged Profiler** sample screens demonstrating single-screen and step-by-step paging profiling workflows.
+* **Native SDK Updates:**
+  - Updated Android SDK to `3.8.1--beta01`.
+  - Updated iOS SDK to `3.8.1--beta01`.
 
 ## 3.8.0--rc1
 
