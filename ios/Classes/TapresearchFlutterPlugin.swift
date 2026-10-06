@@ -223,8 +223,12 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
             handleShowSurveyForPlacement(args: args, result: result)
         case "grantBoost":
             handleGrantBoost(args: args, result: result)
-        case "getPlacementDetails":
-            handleGetPlacementDetails(args: args, result: result)
+		case "getPlacementDetails":
+			handleGetPlacementDetails(args: args, result: result)
+		case "getProfilingQualifications":
+			handleGetProfilingQualifications(args: args, result: result)
+		case "sendProfilingQualifications":
+			handleSendProfilingQualifications(args: args, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -457,6 +461,100 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
         })
         result(nil)
     }
+
+	//MARK: - START PROFILING QUALIFICATIONS
+
+	static let dartQualificationsResponseHandlerName: String = "onQualificationsResponse"
+
+	/// ---------------------------------------------------------------------------------------------
+	/// Get profile qualifications.
+	///
+	/// - Parameters:
+	///   - args: Method arguments containing API token, user identifier and country code.
+	///   - result: Flutter result callback.
+	/// - Returns: Nothing.
+	private func handleGetProfilingQualifications(args: [String: Any], result: @escaping FlutterResult) {
+		guard let apiToken = args["apiToken"] as? String else {
+			return result(FlutterError(code: "INVALID_ARG", message: "apiToken required", details: nil))
+		}
+		guard let userIdentifier = args["userIdentifier"] as? String else {
+			return result(FlutterError(code: "INVALID_ARG", message: "userIdentifier required", details: nil))
+		}
+		guard let countryCode = args["countryCode"] as? String else {
+			return result(FlutterError(code: "INVALID_ARG", message: "countryCode required", details: nil))
+		}
+
+		let callId = args["callId"] as? Int ?? 0
+
+		TapResearch.getProfilingQualifications(
+			apiToken: apiToken,
+			userIdentifier: userIdentifier,
+			countryCode: countryCode,
+			completion: { [weak self] (response: TRProfileResponse?, error: NSError?) in
+				guard let self else { return }
+				if let error {
+					self.invokeError(callId: callId, source: "getProfilingQualifications", error: error)
+				}
+				else {
+					guard let response else { return }
+					let dict = ["callId" : callId, "response" : response.dictionary]
+					self.invokeOnMain(TapresearchFlutterPlugin.dartQualificationsResponseHandlerName, arguments: dict)
+				}
+			}
+		)
+		result(nil)
+	}
+
+	/// ---------------------------------------------------------------------------------------------
+	/// Send profile answers.
+	///
+	/// - Parameters:
+	///   - args: Method arguments containing API token, user identifier, country code and an array of answers
+	///   - result: Flutter result callback.
+	/// - Returns: Nothing.
+	private func handleS endProfilingQualifications(args: [String: Any], result: @escaping FlutterResult) {
+		guard let apiToken = args["apiToken"] as? String else {
+			return result(FlutterError(code: "INVALID_ARG", message: "apiToken required", details: nil))
+		}
+		guard let userIdentifier = args["userIdentifier"] as? String else {
+			return result(FlutterError(code: "INVALID_ARG", message: "userIdentifier required", details: nil))
+		}
+		guard let countryCode = args["countryCode"] as? String else {
+			return result(FlutterError(code: "INVALID_ARG", message: "countryCode required", details: nil))
+		}
+		guard let answers = args["answers"] as? [[String: Any]] else {
+			return result(FlutterError(code: "INVALID_ARG", message: "answers required", details: nil))
+		}
+
+		let callId = args["callId"] as? Int ?? 0
+		var theAnswers: [TRProfileAnswer] = []
+		for answer in answers {
+			if let answerArray: [String] = answer["actual_user_answer"] as? [String], let qId: Int = answer["question_id"] as? Int {
+				theAnswers.append(TRProfileAnswer.answer(questionId: qId, answers: answerArray))
+			}
+		}
+
+		TapResearch.sendProfilingAnswers(
+			apiToken: apiToken,
+			userIdentifier: userIdentifier,
+			answers: theAnswers,
+			countryCode: countryCode,
+			completion: { [weak self] (response: TRProfileResponse?, error: NSError?) in
+				guard let self else { return }
+				if let error {
+					self.invokeError(callId: callId, source: "getProfilingQualifications", error: error)
+				}
+				else {
+					guard let response else { return }
+					let dict = ["callId" : callId, "response" : response.dictionary]
+					self.invokeOnMain(TapresearchFlutterPlugin.dartQualificationsResponseHandlerName, arguments: dict)
+				}
+			}
+		)
+		result(nil)
+	}
+
+	//MARK: - END PROFILING QUALIFICATIONS
 
     /// ---------------------------------------------------------------------------------------------
     /// Gets TapResearch placement details for a placement.
@@ -725,4 +823,69 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
             },
         ]
     }
+
+}
+
+/// ---------------------------------------------------------------------------------------------
+extension TRProfileAnswerOption {
+
+	var dictionary: [String:Any] {
+		return [
+			"option_text" : optionText,
+			"en_translation" : enTranslation,
+			"pre_code" : preCode
+		]
+	}
+}
+
+/// ---------------------------------------------------------------------------------------------
+extension TRProfileAnswerResultError {
+
+	var dictionary: [String:Any] {
+		return [
+			"question_id" : questionId,
+			"error" : error
+		]
+	}
+}
+
+/// ---------------------------------------------------------------------------------------------
+extension TRProfileAnswerResult {
+
+	var dictionary: [String:Any] {
+		return [
+			"accepted" : accepted,
+			"invalid" : invalid,
+			"errors" : errors.map { $0.dictionary }
+		]
+	}
+}
+
+/// ---------------------------------------------------------------------------------------------
+extension TRProfileQuestion {
+
+	var dictionary: [String:Any?] {
+		return [
+			"question_id" : questionId,
+			"question_text" : questionText,
+			"en_translation" : enTranslation,
+			"question_subtext" : questionSubtext,
+			"answer_type" : answerType,
+			"previous_error" : previousError,
+			"qualification_answers" : qualificationAnswers.map { $0.dictionary }
+		]
+	}
+}
+
+extension TRProfileResponse {
+
+	var dictionary: [String:Any?] {
+		return [
+			"country_code" : countryCode,
+			"locale" : locale,
+			"is_profiled" : isProfiled,
+			"result" : result?.dictionary,
+			"qualifications" : qualifications.map { $0.dictionary }
+		]
+	}
 }
