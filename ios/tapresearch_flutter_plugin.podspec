@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'tapresearch_flutter_plugin'
-  s.version          = '3.8.0--rc1'
+  s.version          = '3.8.1--beta01'
   s.summary          = 'In-app Monetization SDK (iOS & Android) via Surveys by TapResearch'
   s.description      = <<-DESC
 In-app Monetization SDK via Surveys by TapResearch (iOS & Android)
@@ -15,8 +15,8 @@ In-app Monetization SDK via Surveys by TapResearch (iOS & Android)
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'TapResearch', '3.8.0--rc1'
-  s.platform = :ios, '13.0'
+  s.dependency 'TapResearch', '3.8.1--beta01'
+  s.platform = :ios, '15.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

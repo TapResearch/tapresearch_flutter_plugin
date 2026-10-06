@@ -1,4 +1,20 @@
 pluginManagement {
+    // Clean up conflicting ANDROID_PREFS_ROOT env var to prevent AGP AndroidLocationsException
+    try {
+        val processEnvironment = Class.forName("java.lang.ProcessEnvironment")
+        val theEnvironmentField = processEnvironment.getDeclaredField("theEnvironment")
+        theEnvironmentField.isAccessible = true
+        val map = theEnvironmentField.get(null) as MutableMap<String, String>
+        map.remove("ANDROID_PREFS_ROOT")
+
+        val theCaseInsensitiveEnvironmentField = processEnvironment.getDeclaredField("theCaseInsensitiveEnvironment")
+        theCaseInsensitiveEnvironmentField.isAccessible = true
+        val ciMap = theCaseInsensitiveEnvironmentField.get(null) as MutableMap<String, String>
+        ciMap.remove("ANDROID_PREFS_ROOT")
+    } catch (e: Throwable) {
+        // Ignored
+    }
+
     val flutterSdkPath =
         run {
             val properties = java.util.Properties()

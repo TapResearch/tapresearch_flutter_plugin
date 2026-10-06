@@ -1,6 +1,8 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:tapresearch_flutter_plugin/tapresearch_flutter_plugin.dart';
+import 'profiler_screen.dart';
+import 'paged_profiler_screen.dart';
 
 final _placementTagController = TextEditingController(text: 'earn-center');
 
@@ -31,6 +33,13 @@ class _HomeScreenState extends State<HomeScreen>
   TRPlacementDetails? _placementDetails;
   bool? _isProfilerPlacement;
 
+  final _apiToken = Platform.isAndroid
+      ? 'fb28e5e0572876db0790ecaf6c588598'
+      : '100e9133abc21471c8cd373587e07515';
+  final _userIdentifier = Platform.isAndroid
+      ? 'tr-sdk-test-user-4902222'
+      : 'tr-sdk-test-ios-flutter-user';
+
   @override
   void initState() {
     super.initState();
@@ -39,8 +48,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<void> _initializeSdk() async {
     await _plugin.initialize(
-      apiToken: Platform.isAndroid ? 'fb28e5e0572876db0790ecaf6c588598' : '100e9133abc21471c8cd373587e07515',
-      userIdentifier: Platform.isAndroid ? 'tr-sdk-test-user-46183135' : 'tr-sdk-test-ios-flutter-user',
+      apiToken: _apiToken,
+      userIdentifier: _userIdentifier,
       sdkReadyCallback: this,
       errorCallback: this,
       rewardCallback: this,
@@ -158,6 +167,18 @@ class _HomeScreenState extends State<HomeScreen>
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Text(
+                      'API Token: $_apiToken',
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'User ID: $_userIdentifier',
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: TextField(
@@ -223,6 +244,32 @@ class _HomeScreenState extends State<HomeScreen>
                             builder: (_) => const SurveyWallPreviewScreen()),
                       ),
                       child: const Text('Survey Wall Preview'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProfilerScreen(
+                            apiToken: _apiToken,
+                            userIdentifier: _userIdentifier,
+                          ),
+                        ),
+                      ),
+                      child: const Text('Profiler'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PagedProfilerScreen(
+                            apiToken: _apiToken,
+                            userIdentifier: _userIdentifier,
+                          ),
+                        ),
+                      ),
+                      child: const Text('Paged Profiler'),
                     ),
                   ],
                 ),

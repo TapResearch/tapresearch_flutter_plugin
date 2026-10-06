@@ -161,4 +161,16 @@ internal class TapresearchFlutterPluginTest {
         )
         verify(result).error("INVALID_ARG", "placementTag required", null)
     }
+
+    @Test
+    fun inspectSdkModels() {
+        val method = com.tapresearch.tapsdk.models.TRQualification::class.java.getMethod("getQualificationAnswers")
+        println("qualificationAnswers return type: ${method.genericReturnType}")
+        if (method.genericReturnType is java.lang.reflect.ParameterizedType) {
+            val pt = method.genericReturnType as java.lang.reflect.ParameterizedType
+            val itemType = pt.actualTypeArguments[0] as Class<*>
+            println("qualificationAnswers item class: ${itemType.name}")
+            itemType.declaredFields.forEach { println("Field: ${it.name} (${it.type})") }
+        }
+    }
 }
