@@ -15,7 +15,7 @@ In-app Monetization SDK via Surveys by TapResearch (iOS & Android)
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'TapResearch', '3.8.1--beta1'
+  s.dependency 'TapResearch', '3.8.1--beta01'
   s.platform = :ios, '15.0'
 
   # Flutter.framework does not contain a i386 slice.
