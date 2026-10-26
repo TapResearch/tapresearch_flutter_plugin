@@ -107,7 +107,7 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
     TapResearchSDKDelegate, TapResearchRewardDelegate,
     TapResearchQuickQuestionDelegate, TapResearchSurveysDelegate {
 
-	@objc public static let packageVersion: String = "3.8.1--beta01"
+	@objc public static let packageVersion: String = "3.8.1--beta02"
 
     private var channel: FlutterMethodChannel!
     private var hasRewardCallback = false
@@ -512,7 +512,7 @@ public final class TapresearchFlutterPlugin: NSObject, FlutterPlugin,
 	///   - args: Method arguments containing API token, user identifier, country code and an array of answers
 	///   - result: Flutter result callback.
 	/// - Returns: Nothing.
-	private func handleS endProfilingQualifications(args: [String: Any], result: @escaping FlutterResult) {
+	private func handleSendProfilingQualifications(args: [String: Any], result: @escaping FlutterResult) {
 		guard let apiToken = args["apiToken"] as? String else {
 			return result(FlutterError(code: "INVALID_ARG", message: "apiToken required", details: nil))
 		}
