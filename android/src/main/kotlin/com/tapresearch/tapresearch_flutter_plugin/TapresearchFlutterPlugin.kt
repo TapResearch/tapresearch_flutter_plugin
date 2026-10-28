@@ -36,7 +36,7 @@ class TapresearchFlutterPlugin : FlutterPlugin, MethodCallHandler {
     companion object {
 
         // edit to be same as tapresearch_flutter_plugin version in pubspec.yaml!
-        const val VERSION = "3.8.1--beta01"
+        const val VERSION = "3.8.1--beta02"
     }
 
     private var applicationContext: WeakReference<Context>? = null
