@@ -1,3 +1,11 @@
+## 3.7.3
+
+* iOS SDK updated to 3.7.4
+  - Internal bug fixes and performance improvements
+  
+* Android SDK updated to 3.7.3
+  - - Internal bug fixes and performance improvements
+
 ## 3.8.0--rc1
 
 * iOS SDK updated to 3.8.0--rc1
